@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #06080a;
+  --foreground: #f3f4f1;
+  --surface: #0b0f14;
+  --surface-elevated: #11161d;
+  --surface-hover: #161e27;
+
+  --text-primary: #f3f4f1;
+  --text-secondary: #8e959e;
+  --text-tertiary: #5b626c;
+
+  --accent-emerald: #10b981;
+  --accent-emerald-bright: #34d399;
+  --accent-amber: #f59e0b;
+  --accent-amber-bright: #fbbf24;
+
+  --border-hairline: rgba(243, 244, 241, 0.08);
+  --border-medium: rgba(243, 244, 241, 0.16);
+  --border-emerald: rgba(16, 185, 129, 0.35);
+  --border-amber: rgba(245, 158, 11, 0.35);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+
+  --color-emerald-accent: var(--accent-emerald);
+  --color-emerald-bright: var(--accent-emerald-bright);
+  --color-amber-accent: var(--accent-amber);
+  --color-amber-bright: var(--accent-amber-bright);
+
+  --font-sans: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base Body Styles */
+html {
+  background-color: #06080a;
+  color: #f3f4f1;
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+  background-color: #06080a;
+  color: #f3f4f1;
+  overflow-x: hidden;
+}
+
+/* Subtle Mineral Noise Grain Backdrop */
+.bg-mineral-grain {
+  background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
+                    radial-gradient(circle at 100% 50%, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
+}
+
+/* Custom Selection */
+::selection {
+  background-color: rgba(16, 185, 129, 0.25);
+  color: #34d399;
+}
+
+/* Focus States for Accessibility */
+:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 3px;
+}
+
+/* Reduced Motion Utility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
