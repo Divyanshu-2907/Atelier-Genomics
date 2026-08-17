@@ -19,9 +19,9 @@ export const Footer: React.FC = () => {
           {/* Column 1: Brand Identity & Operational Status (4 Cols) */}
           <div className="lg:col-span-4 space-y-6">
             <a href="#" className="flex items-center gap-3 w-fit group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg p-1">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0b0f14] border border-white/14 group-hover:border-emerald-500/50 transition-colors shrink-0 p-1 flex items-center justify-center shadow-md">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0b0f14] border border-white/14 group-hover:border-emerald-500/50 transition-colors shrink-0 overflow-hidden flex items-center justify-center shadow-md">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icon.png" alt="Atelier Genomics Icon" className="w-full h-full object-contain rounded-lg" />
+                <img src="/icon.png" alt="Atelier Genomics Icon" className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col">
                 <span className="font-sans text-lg font-light tracking-tight text-[#f3f4f1] group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">

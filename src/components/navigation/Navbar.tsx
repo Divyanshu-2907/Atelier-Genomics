@@ -111,9 +111,9 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2.5 group focus-visible:outline-none"
             aria-label="Atelier Genomics Homepage"
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0b0f14] border border-white/14 group-hover:border-emerald-500/50 transition-colors shrink-0 p-1 flex items-center justify-center shadow-md">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#0b0f14] border border-white/14 group-hover:border-emerald-500/50 transition-colors shrink-0 overflow-hidden flex items-center justify-center shadow-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon.png" alt="Atelier Genomics Icon" className="w-full h-full object-contain rounded-lg" />
+              <img src="/icon.png" alt="Atelier Genomics Icon" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-sans text-base lg:text-lg font-light tracking-tight text-[#f3f4f1] group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
