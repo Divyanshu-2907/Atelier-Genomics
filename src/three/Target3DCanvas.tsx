@@ -48,7 +48,7 @@ function ResearchTargetMesh({ areaIndex, isMobile }: { areaIndex: number; isMobi
 
   // Generate vertex positions for the 4 research areas
   const { posGenomics, posCompBio, posTherapeutics, posIntel, colorArray } = useMemo(() => {
-    const count = isMobile ? 350 : 900;
+    const count = isMobile ? 280 : 560;
     const gen = new Float32Array(count * 3);
     const comp = new Float32Array(count * 3);
     const ther = new Float32Array(count * 3);

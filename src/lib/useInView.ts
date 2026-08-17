@@ -1,17 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { subscribeIntroActive, getIntroActive, getIntroActiveServer } from './introActive';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Tracks whether an element is within (or near) the viewport. Used to pause
  * expensive WebGL canvases while they're scrolled off-screen — the render loop
  * is only kept alive for the canvas the user can actually see.
  *
- * `rootMargin` pre-warms the canvas slightly before it enters view so there's
- * no visible pop-in.
+ * `rootMargin` pre-warms the canvas before it enters view so there's no visible
+ * pop-in — this is what keeps the intro auto-scroll journey from revealing a
+ * paused canvas, without having to force *every* canvas to render at once.
  */
-export function useInView<T extends HTMLElement>(rootMargin = '250px') {
+export function useInView<T extends HTMLElement>(rootMargin = '600px') {
   const ref = useRef<T>(null);
   // Start true so the canvas mounts with its render loop registered and paints
   // a first frame; the observer then pauses it only once it scrolls out of view.
@@ -32,9 +32,5 @@ export function useInView<T extends HTMLElement>(rootMargin = '250px') {
     return () => io.disconnect();
   }, [rootMargin]);
 
-  // While the cinematic intro runs, force every canvas to keep rendering so the
-  // auto-scroll journey never reveals a paused/blank canvas.
-  const introActive = useSyncExternalStore(subscribeIntroActive, getIntroActive, getIntroActiveServer);
-
-  return { ref, inView: introActive || inView } as const;
+  return { ref, inView } as const;
 }

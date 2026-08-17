@@ -422,7 +422,7 @@ export const IntroSequence: React.FC = () => {
 
       <Canvas
         camera={{ position: [0, 0, 11.5], fov: 50 }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
         <ambientLight intensity={0.6} />
