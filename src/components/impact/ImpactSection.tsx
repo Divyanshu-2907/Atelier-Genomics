@@ -114,9 +114,9 @@ export const ImpactSection: React.FC = () => {
   return (
     <section
       id="impact"
-      className="relative py-24 lg:py-36 px-6 lg:px-12 bg-[#06080a] border-t border-white/6 overflow-hidden"
+      className="relative py-16 lg:py-24 px-6 lg:px-12 bg-[#06080a] border-t border-white/6 overflow-hidden"
     >
-      <div className="max-w-7xl w-full mx-auto space-y-20">
+      <div className="max-w-7xl w-full mx-auto space-y-12 lg:space-y-16">
         {/* Editorial Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-8 border-b border-white/8">
           <div className="space-y-3 max-w-[65ch]">

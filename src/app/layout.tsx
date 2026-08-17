@@ -3,6 +3,8 @@ import { Outfit, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/navigation/Navbar';
 import { SmoothScroll } from '@/components/shared/SmoothScroll';
+import { IntroSequence } from '@/components/intro/IntroSequence';
+import { ReticleCursor } from '@/components/shared/ReticleCursor';
 
 const outfit = Outfit({
   variable: '--font-outfit',
@@ -51,6 +53,14 @@ export const metadata: Metadata = {
     description:
       'Engineering biology for what comes next. De novo protein architectures & targeted capsids.',
   },
+  icons: {
+    icon: [
+      { url: '/icon.png' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
   robots: {
     index: true,
     follow: true,
@@ -67,7 +77,12 @@ export default function RootLayout({
       lang="en"
       className={`${outfit.variable} ${jetbrainsMono.variable} h-full dark`}
     >
-      <body className="min-h-dvh flex flex-col bg-[#06080a] text-[#f3f4f1] font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
+      <body
+        suppressHydrationWarning
+        className="min-h-dvh flex flex-col bg-[#06080a] text-[#f3f4f1] font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300"
+      >
+        <IntroSequence />
+        <ReticleCursor />
         <SmoothScroll>
           <Navbar />
           <div id="root-container" className="relative flex-1 flex flex-col w-full">

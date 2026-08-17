@@ -48,7 +48,7 @@ export const CtaSection: React.FC = () => {
   return (
     <section
       id="cta"
-      className="relative min-h-[85dvh] flex items-center justify-center py-28 lg:py-40 px-6 lg:px-12 bg-[#06080a] border-t border-white/6 overflow-hidden select-none"
+      className="relative py-20 lg:py-28 px-6 lg:px-12 bg-[#06080a] border-t border-white/6 overflow-hidden select-none"
     >
       {/* Living Science Undulating Ambient Backdrop */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-500/10 via-cyan-500/5 to-transparent blur-3xl pointer-events-none" />

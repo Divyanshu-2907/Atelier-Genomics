@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePrefersReducedMotion } from '@/lib/reduced-motion';
-import { ArrowUp, Dna, GithubLogo, LinkedinLogo, TwitterLogo, Article } from '@phosphor-icons/react';
+import { ArrowUp, GithubLogo, LinkedinLogo, TwitterLogo, Article } from '@phosphor-icons/react';
 
 export const Footer: React.FC = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -12,15 +12,16 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#06080a] border-t border-white/8 pt-20 pb-12 px-6 lg:px-12 text-[#8e959e] font-sans text-xs select-none">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <footer className="bg-[#06080a] border-t border-white/8 pt-12 pb-10 px-6 lg:px-12 text-[#8e959e] font-sans text-xs select-none">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Main 4-Column Minimal Footer Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-white/6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-10 border-b border-white/6">
           {/* Column 1: Brand Identity & Operational Status (4 Cols) */}
           <div className="lg:col-span-4 space-y-6">
             <a href="#" className="flex items-center gap-3 w-fit group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg p-1">
-              <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-emerald-400 group-hover:border-emerald-500/40 transition-colors">
-                <Dna size={22} weight="bold" />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0b0f14] border border-white/14 group-hover:border-emerald-500/50 transition-colors shrink-0 p-1 flex items-center justify-center shadow-md">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icon.png" alt="Atelier Genomics Icon" className="w-full h-full object-contain rounded-lg" />
               </div>
               <div className="flex flex-col">
                 <span className="font-sans text-lg font-light tracking-tight text-[#f3f4f1] group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">

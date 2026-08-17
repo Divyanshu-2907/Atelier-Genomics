@@ -2,8 +2,11 @@
 
 import React, { useRef, useMemo, useEffect, useSyncExternalStore } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { usePrefersReducedMotion } from '@/lib/reduced-motion';
+import { useInView } from '@/lib/useInView';
+import { getGlowTexture } from './particleTexture';
 
 function pseudoRandom(seed: number) {
   const x = Math.sin(seed * 12.9898 + 91.733) * 43758.5453;
@@ -21,7 +24,7 @@ function getServerSnapshot() {
 }
 
 function subscribeMobile(callback: () => void) {
-  if (typeof window === 'undefined') return () => {};
+  if (typeof window === 'undefined') return () => { };
   window.addEventListener('resize', callback);
   return () => window.removeEventListener('resize', callback);
 }
@@ -37,6 +40,7 @@ interface TargetCanvasProps {
 function ResearchTargetMesh({ areaIndex, isMobile }: { areaIndex: number; isMobile: boolean }) {
   const meshRef = useRef<THREE.Points>(null!);
   const targetArea = useRef(areaIndex);
+  const glowTexture = useMemo(() => getGlowTexture(), []);
 
   useEffect(() => {
     targetArea.current = areaIndex;
@@ -163,10 +167,13 @@ function ResearchTargetMesh({ areaIndex, isMobile }: { areaIndex: number; isMobi
         />
       </bufferGeometry>
       <pointsMaterial
-        size={isMobile ? 0.12 : 0.15}
+        map={glowTexture}
+        alphaMap={glowTexture}
+        size={isMobile ? 0.24 : 0.30}
         vertexColors
         transparent
-        opacity={0.9}
+        opacity={0.95}
+        depthWrite={false}
         blending={THREE.AdditiveBlending}
         sizeAttenuation
       />
@@ -178,11 +185,12 @@ export const Target3DCanvas: React.FC<TargetCanvasProps> = ({ areaIndex }) => {
   const isMounted = useSyncExternalStore(subscribeClient, getClientSnapshot, getServerSnapshot);
   const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, getServerSnapshot);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const { ref: viewRef, inView } = useInView<HTMLDivElement>();
 
   if (!isMounted || prefersReducedMotion) {
     const areaNames = ['[ 01 // GENOMICS ALIGNMENT ]', '[ 02 // PROTEIN FOLDING ]', '[ 03 // CAPSID ENGINEERING ]', '[ 04 // NEURAL AFFINITY ]'];
     return (
-      <div className="w-full h-full min-h-[380px] flex items-center justify-center relative bg-radial from-emerald-500/10 via-transparent to-transparent rounded-2xl border border-white/8">
+      <div className="w-full h-full min-h-[320px] lg:min-h-[420px] flex items-center justify-center relative bg-radial from-emerald-500/10 via-transparent to-transparent rounded-2xl border border-white/8">
         <div className="font-mono text-xs text-emerald-400 uppercase tracking-widest px-4 py-2 rounded-full border border-emerald-500/30 bg-[#06080a]">
           {areaNames[areaIndex] || areaNames[0]}
         </div>
@@ -191,15 +199,28 @@ export const Target3DCanvas: React.FC<TargetCanvasProps> = ({ areaIndex }) => {
   }
 
   return (
-    <div className="w-full h-full min-h-[380px] lg:min-h-[520px] relative rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing" aria-hidden="true">
+    <div ref={viewRef} className="w-full aspect-square sm:aspect-[4/3] relative rounded-2xl overflow-hidden" aria-hidden="true">
       <Canvas
-        camera={{ position: [0, 0, 7.5], fov: 48 }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        frameloop={inView ? 'always' : 'never'}
+        camera={{ position: [0, 0, 7.5], fov: 46 }}
+        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
         gl={{ antialias: true, alpha: true }}
       >
+        <fog attach="fog" args={['#06080a', 7.5, 15]} />
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 10]} intensity={1} />
-        <ResearchTargetMesh areaIndex={areaIndex} isMobile={isMobile} />
+        <group scale={isMobile ? 0.52 : 0.62}>
+          <ResearchTargetMesh areaIndex={areaIndex} isMobile={isMobile} />
+        </group>
+        <EffectComposer multisampling={0}>
+          <Bloom
+            intensity={isMobile ? 0.65 : 1.0}
+            luminanceThreshold={0.12}
+            luminanceSmoothing={0.9}
+            mipmapBlur
+            radius={0.72}
+          />
+        </EffectComposer>
       </Canvas>
     </div>
   );

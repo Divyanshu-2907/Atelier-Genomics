@@ -2,8 +2,11 @@
 
 import React, { useRef, useMemo, useEffect, useSyncExternalStore } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { usePrefersReducedMotion } from '@/lib/reduced-motion';
+import { useInView } from '@/lib/useInView';
+import { getGlowTexture } from './particleTexture';
 
 // Pure deterministic random generator
 function pseudoRandom(seed: number) {
@@ -22,7 +25,7 @@ function getServerSnapshot() {
 }
 
 function subscribeMobile(callback: () => void) {
-  if (typeof window === 'undefined') return () => {};
+  if (typeof window === 'undefined') return () => { };
   window.addEventListener('resize', callback);
   return () => window.removeEventListener('resize', callback);
 }
@@ -38,6 +41,7 @@ interface VisualizerProps {
 function EvolutionMesh({ stage, isMobile }: { stage: number; isMobile: boolean }) {
   const meshRef = useRef<THREE.Points>(null!);
   const targetMorph = useRef(stage);
+  const glowTexture = useMemo(() => getGlowTexture(), []);
 
   useEffect(() => {
     targetMorph.current = stage;
@@ -158,10 +162,13 @@ function EvolutionMesh({ stage, isMobile }: { stage: number; isMobile: boolean }
         />
       </bufferGeometry>
       <pointsMaterial
-        size={isMobile ? 0.12 : 0.15}
+        map={glowTexture}
+        alphaMap={glowTexture}
+        size={isMobile ? 0.20 : 0.26}
         vertexColors
         transparent
-        opacity={0.85}
+        opacity={0.9}
+        depthWrite={false}
         blending={THREE.AdditiveBlending}
         sizeAttenuation
       />
@@ -173,11 +180,12 @@ export const InnovationVisualizer: React.FC<VisualizerProps> = ({ stage }) => {
   const isMounted = useSyncExternalStore(subscribeClient, getClientSnapshot, getServerSnapshot);
   const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, getServerSnapshot);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const { ref: viewRef, inView } = useInView<HTMLDivElement>();
 
   if (!isMounted || prefersReducedMotion) {
     const stageLabels = ['[ 01 // ORGANIC CELLULAR MESH ]', '[ 02 // SEQUENCE DATA STREAM ]', '[ 03 // INTELLIGENCE MODEL ]'];
     return (
-      <div className="w-full h-full min-h-[350px] flex items-center justify-center relative bg-radial from-cyan-500/10 via-transparent to-transparent rounded-2xl border border-white/8">
+      <div className="w-full h-[300px] lg:h-[360px] min-h-[300px] flex items-center justify-center relative bg-radial from-cyan-500/10 via-transparent to-transparent rounded-2xl border border-white/8">
         <div className="font-mono text-xs text-cyan-400 uppercase tracking-widest px-4 py-2 rounded-full border border-cyan-500/30 bg-[#06080a]">
           {stageLabels[stage] || stageLabels[0]}
         </div>
@@ -186,14 +194,27 @@ export const InnovationVisualizer: React.FC<VisualizerProps> = ({ stage }) => {
   }
 
   return (
-    <div className="w-full h-full min-h-[350px] lg:min-h-[480px] relative rounded-2xl overflow-hidden" aria-hidden="true">
+    <div ref={viewRef} className="w-full h-[300px] lg:h-[360px] min-h-[300px] relative rounded-2xl overflow-hidden" aria-hidden="true">
       <Canvas
-        camera={{ position: [0, 0, 7], fov: 50 }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        frameloop={inView ? 'always' : 'never'}
+        camera={{ position: [0, 0, 5.8], fov: 48 }}
+        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
         gl={{ antialias: true, alpha: true }}
       >
+        <fog attach="fog" args={['#06080a', 6, 13]} />
         <ambientLight intensity={0.5} />
-        <EvolutionMesh stage={stage} isMobile={isMobile} />
+        <group scale={isMobile ? 0.62 : 0.72}>
+          <EvolutionMesh stage={stage} isMobile={isMobile} />
+        </group>
+        <EffectComposer multisampling={0}>
+          <Bloom
+            intensity={isMobile ? 0.6 : 0.95}
+            luminanceThreshold={0.12}
+            luminanceSmoothing={0.9}
+            mipmapBlur
+            radius={0.72}
+          />
+        </EffectComposer>
       </Canvas>
     </div>
   );

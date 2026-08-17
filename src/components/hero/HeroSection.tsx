@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from '@/components/shared/Button';
 import { ScientificLabel } from '@/components/shared/ScientificLabel';
-import { Hero3DCanvas } from '@/three/Hero3DCanvas';
+import { Hero3DCanvas, DNAState } from '@/three/Hero3DCanvas';
 import { ReticleContainer } from '@/components/shared/ReticleContainer';
+import { Magnetic } from '@/components/shared/Magnetic';
 import { usePrefersReducedMotion } from '@/lib/reduced-motion';
 import { ArrowRight, Dna, Database, ShieldCheck } from '@phosphor-icons/react';
+import { clsx } from 'clsx';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -20,6 +22,19 @@ export const HeroSection: React.FC = () => {
   const rightColRef = useRef<HTMLDivElement>(null);
   const metadataRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
+
+  const [dnaState, setDnaState] = useState<DNAState>('IDLE_SCATTERED');
+
+  const handleStateChange = useCallback((nextState: DNAState) => {
+    setDnaState(nextState);
+  }, []);
+
+  const handleToggleAssembly = useCallback(() => {
+    setDnaState((prev) => {
+      if (prev === 'ASSEMBLED' || prev === 'ASSEMBLING') return 'DECONSTRUCTING';
+      return 'ASSEMBLING';
+    });
+  }, []);
 
   // GSAP ScrollTrigger Sequence for cinematic scroll-driven section exit
   useEffect(() => {
@@ -58,11 +73,45 @@ export const HeroSection: React.FC = () => {
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
+  // Telemetry badge status mappings
+  const getStatusBadge = () => {
+    switch (dnaState) {
+      case 'ASSEMBLING':
+        return {
+          text: 'SEQUENCE / SYNTHESIZING',
+          color: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
+          dot: 'bg-emerald-400 animate-ping',
+        };
+      case 'ASSEMBLED':
+        return {
+          text: 'SEQUENCE / ACTIVE',
+          color: 'text-[#f3f4f1] border-white/14 bg-[#06080a]/80',
+          dot: 'bg-emerald-400',
+        };
+      case 'DECONSTRUCTING':
+        return {
+          text: 'SEQUENCE / UNFOLDING',
+          color: 'text-amber-400 border-amber-500/40 bg-amber-500/10',
+          dot: 'bg-amber-400 animate-pulse',
+        };
+      case 'SCATTERED':
+      case 'IDLE_SCATTERED':
+      default:
+        return {
+          text: 'MOLECULAR FIELD / READY',
+          color: 'text-cyan-400 border-cyan-500/40 bg-cyan-500/10',
+          dot: 'bg-cyan-400',
+        };
+    }
+  };
+
+  const statusBadge = getStatusBadge();
+
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-dvh flex items-center justify-center pt-24 lg:pt-28 pb-16 px-6 lg:px-12 bg-[#06080a] bg-mineral-grain overflow-hidden"
+      className="relative py-16 lg:py-24 pt-24 lg:pt-28 px-6 lg:px-12 bg-[#06080a] bg-mineral-grain overflow-hidden"
     >
       {/* Ambient Radial Background Glows */}
       <div className="absolute top-1/4 left-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -91,31 +140,35 @@ export const HeroSection: React.FC = () => {
 
           {/* Primary & Secondary Action CTAs */}
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full sm:w-auto"
-              icon={<ArrowRight size={18} />}
-              onClick={() => {
-                const target = document.querySelector('#cta');
-                if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-              }}
-            >
-              Initiate Collaboration
-            </Button>
+            <Magnetic className="w-full sm:w-auto">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full"
+                icon={<ArrowRight size={18} />}
+                onClick={() => {
+                  const target = document.querySelector('#cta');
+                  if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                }}
+              >
+                Initiate Collaboration
+              </Button>
+            </Magnetic>
 
-            <Button
-              variant="secondary"
-              size="lg"
-              className="w-full sm:w-auto"
-              icon={<Dna size={18} />}
-              onClick={() => {
-                const target = document.querySelector('#research');
-                if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-              }}
-            >
-              Explore Research Data
-            </Button>
+            <Magnetic className="w-full sm:w-auto">
+              <Button
+                variant="secondary"
+                size="lg"
+                className="w-full"
+                icon={<Dna size={18} />}
+                onClick={() => {
+                  const target = document.querySelector('#research');
+                  if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                }}
+              >
+                Explore Research Data
+              </Button>
+            </Magnetic>
           </div>
 
           {/* Micro Telemetry Metric Pill */}
@@ -134,7 +187,11 @@ export const HeroSection: React.FC = () => {
         {/* Right Column: Interactive 3D Canvas & Floating Scientific Metadata Overlays */}
         <div ref={rightColRef} className="lg:col-span-6 relative w-full">
           <ReticleContainer label="Macromolecular Simulator" sequenceId="GEN-04" accent="emerald" className="w-full">
-            <Hero3DCanvas />
+            <Hero3DCanvas
+              dnaState={dnaState}
+              onStateChange={handleStateChange}
+              onToggleAssembly={handleToggleAssembly}
+            />
 
             {/* Floating Research Metadata Overlays */}
             <div
@@ -147,9 +204,10 @@ export const HeroSection: React.FC = () => {
                 GENOME / 04
               </div>
 
-              {/* Top Right Metadata Overlay */}
-              <div className="self-end px-3 py-1.5 rounded-md bg-[#06080a]/80 border border-white/10 backdrop-blur-md text-[#f3f4f1]">
-                SEQUENCE / ACTIVE
+              {/* Top Right Dynamic Status Overlay */}
+              <div className={clsx('self-end px-3 py-1.5 rounded-md border backdrop-blur-md transition-all flex items-center gap-2', statusBadge.color)}>
+                <span className={clsx('h-1.5 w-1.5 rounded-full', statusBadge.dot)} />
+                {statusBadge.text}
               </div>
 
               {/* Bottom Row Overlays */}
