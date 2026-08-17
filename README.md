@@ -16,17 +16,25 @@ Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Three.js / React Thre
 
 ## Table of Contents
 
-1. [Overview](#1-overview)
-2. [Design Concept](#2-design-concept)
-3. [Feature Highlights](#3-feature-highlights)
-4. [Animation & Interaction Approach](#4-animation--interaction-approach)
-5. [Performance Strategy](#5-performance-strategy)
-6. [Accessibility](#6-accessibility)
-7. [Tech Stack](#7-tech-stack)
-8. [Project Structure](#8-project-structure)
-9. [Getting Started](#9-getting-started)
-10. [Deployment](#10-deployment)
-11. [Disclaimers](#11-disclaimers)
+- [Atelier Genomics](#atelier-genomics)
+    - [Computational Cell Therapy \& Programmable Biology — an animation-driven biotech landing page](#computational-cell-therapy--programmable-biology--an-animation-driven-biotech-landing-page)
+  - [Table of Contents](#table-of-contents)
+  - [1. Overview](#1-overview)
+  - [2. Design Concept](#2-design-concept)
+  - [3. Feature Highlights](#3-feature-highlights)
+  - [4. Animation \& Interaction Approach](#4-animation--interaction-approach)
+    - [The intro sequence — `src/components/intro/IntroSequence.tsx`](#the-intro-sequence--srccomponentsintrointrosequencetsx)
+    - [3D visualization — React Three Fiber + Three.js](#3d-visualization--react-three-fiber--threejs)
+    - [Micro-interactions](#micro-interactions)
+  - [5. Performance Strategy](#5-performance-strategy)
+  - [6. Accessibility](#6-accessibility)
+  - [7. Tech Stack](#7-tech-stack)
+  - [8. Project Structure](#8-project-structure)
+  - [9. Getting Started](#9-getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Install \& run](#install--run)
+    - [Scripts](#scripts)
+  - [10. Disclaimers](#10-disclaimers)
 
 ---
 
@@ -198,20 +206,7 @@ npm run lint     # ESLint
 
 ---
 
-## 10. Deployment
-
-Optimized for **Vercel** (zero-config for Next.js):
-
-1. Push the repository to GitHub.
-2. On [vercel.com](https://vercel.com), **Add New → Project** and import the repo.
-3. Framework preset **Next.js** is auto-detected — leave all defaults. No environment variables are required.
-4. **Deploy.** Every push to `main` redeploys automatically; other branches get preview URLs.
-
-After deploying, add the live URL to the top of this README.
-
----
-
-## 11. Disclaimers
+## 10. Disclaimers
 
 - **Original work.** Public biotech design benchmarks (e.g. DeepPiction and curated Dribbble concepts) were studied only as bars for composition and motion quality. Atelier Genomics is an independently designed, original brand and application — not a copy of any reference.
 - **Illustrative data.** All statistics, candidate counts, binding affinities, and throughput figures shown are sample telemetry for demonstration purposes only. Atelier Genomics is a fictional company.
