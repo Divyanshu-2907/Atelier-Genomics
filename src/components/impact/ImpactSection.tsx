@@ -86,7 +86,7 @@ function CountUpMetric({ metric }: { metric: MetricItem }) {
 
   return (
     <div ref={ref} className="flex flex-col gap-3 group">
-      <div className="flex items-baseline gap-1">
+      <div className="flex items-baseline gap-1" aria-hidden="true">
         <span className="font-sans text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#f3f4f1]">
           {displayValue}
         </span>
@@ -94,6 +94,13 @@ function CountUpMetric({ metric }: { metric: MetricItem }) {
           {metric.suffix}
         </span>
       </div>
+      {/* Real value in the DOM for screen readers, crawlers, and no-JS — the
+          animated number above is decorative and starts at 0 client-side.
+          The visible <h3> below supplies the label, so this is value-only. */}
+      <span className="sr-only">
+        {metric.value}
+        {metric.suffix}
+      </span>
 
       {/* Hairline Indicator Line */}
       <div className="w-12 h-0.5 bg-white/12 group-hover:w-20 group-hover:bg-emerald-400 transition-all duration-300" />
