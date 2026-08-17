@@ -561,7 +561,7 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({
       <Canvas
         frameloop={inView ? 'always' : 'never'}
         camera={{ position: [0, 0, 11.5], fov: 48 }}
-        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
         {/* Depth fade — distant nucleotides dissolve into the background */}

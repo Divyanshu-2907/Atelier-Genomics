@@ -198,7 +198,7 @@ export const InnovationVisualizer: React.FC<VisualizerProps> = ({ stage }) => {
       <Canvas
         frameloop={inView ? 'always' : 'never'}
         camera={{ position: [0, 0, 5.8], fov: 48 }}
-        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ antialias: true, alpha: true }}
       >
         <fog attach="fog" args={['#06080a', 6, 13]} />

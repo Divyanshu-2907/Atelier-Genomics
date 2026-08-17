@@ -203,7 +203,7 @@ export const Target3DCanvas: React.FC<TargetCanvasProps> = ({ areaIndex }) => {
       <Canvas
         frameloop={inView ? 'always' : 'never'}
         camera={{ position: [0, 0, 7.5], fov: 46 }}
-        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ antialias: true, alpha: true }}
       >
         <fog attach="fog" args={['#06080a', 7.5, 15]} />

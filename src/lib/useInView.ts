@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
  * pop-in — this is what keeps the intro auto-scroll journey from revealing a
  * paused canvas, without having to force *every* canvas to render at once.
  */
-export function useInView<T extends HTMLElement>(rootMargin = '600px') {
+export function useInView<T extends HTMLElement>(rootMargin = '300px') {
   const ref = useRef<T>(null);
   // Start true so the canvas mounts with its render loop registered and paints
   // a first frame; the observer then pauses it only once it scrolls out of view.
