@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="public/icon.png" alt="Atelier Genomics logo" width="128" height="128" />
+
 # Atelier Genomics
 
 ### Computational Cell Therapy & Programmable Biology — an animation-driven biotech landing page
