@@ -8,7 +8,7 @@
 
 Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Three.js / React Three Fiber · GSAP · Lenis
 
-**Live demo:** `‹add your Vercel URL here after deploying›`
+**🌐 Live demo:** **[atelier-genomics.vercel.app](https://atelier-genomics.vercel.app/)**
 
 </div>
 
