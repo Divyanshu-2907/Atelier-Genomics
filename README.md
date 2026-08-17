@@ -75,7 +75,7 @@ The visual identity is built on four principles, deliberately avoiding generic A
 
 ## 3. Feature Highlights
 
-- **Cinematic intro sequence** — on first visit, a DNA helix assembles and spins up, then detonates: particles blast past the camera, a shockwave sweeps the screen, and the page beneath takes a brief shake + color-glitch "impact" before settling into the normal layout. Plays once per session; fully skippable.
+- **Cinematic intro journey** — on first visit the page auto-scrolls itself through the *entire* site, top to bottom and back, while a DNA helix **constructs itself strand-by-strand as it descends** (a section-name ticker + progress bar track the travel). Back at the top the helix charges up and **detonates** — particles blast past the camera, a shockwave sweeps out, and the page shakes with a color-glitch "impact" before dropping you into the live site. Plays once per session; fully skippable.
 - **Three interactive WebGL centerpieces** — a double-helix, a 3-stage morphing particle field, and a 4-target morphing lattice, all rendered with soft glow sprites and a selective **bloom** post-process pass.
 - **Cursor-reactive Hero DNA** — nucleotides physically repel away from the pointer (the cursor is projected onto the helix plane each frame).
 - **Custom reticle cursor** — a crosshair that trails the pointer with spring damping and "locks on" over interactive elements.
@@ -91,12 +91,13 @@ The visual identity is built on four principles, deliberately avoiding generic A
 The motion design is layered so that no single technology is overused — each is chosen for what it does best.
 
 ### The intro sequence — [`src/components/intro/IntroSequence.tsx`](src/components/intro/IntroSequence.tsx)
-A three-phase state machine driven off a single render-clock:
-1. **Assemble** — particles interpolate from a scattered shell into a double helix with per-particle stagger delays, while the camera dollies in and a diegetic `SEQUENCING GENOME · NN%` readout counts up.
-2. **Charge** — the fully-formed helix spins up ("round and round").
-3. **Detonate** — particles lerp to far radial burst targets with an `easeOutExpo` curve (biased toward the viewer so they fly *past* the camera); simultaneously a GSAP timeline fires the flash, shockwave ring, overlay fade, and a keyframed shake + CSS color-glitch on the page content.
+A single persistent DNA canvas rides above the dimmed page through a four-act state machine:
+1. **Journey** — the intro takes over scroll and animates it from top to bottom, then back, via the app's Lenis instance (exposed through a small store) with user input locked. As it descends, the helix's **build progress is driven directly by scroll depth** (`buildRef = scrollY / maxScroll`), so it draws itself top-first and is fully formed by the last section.
+2. **Charge** — back at the top, the scrim goes opaque and the completed helix spins up ("round and round").
+3. **Detonate** — particles lerp to far radial burst targets with an `easeOutExpo` curve (biased toward the viewer so they fly *past* the camera); a GSAP timeline fires the flash, shockwave ring, overlay fade, and a keyframed shake + CSS color-glitch on the page content.
+4. **Release** — scroll is handed back to Lenis and the overlay unmounts.
 
-Scroll is locked during the intro and released on completion — "then it scrolls, and it's normal."
+During the journey a global `introActive` flag (`src/lib/introActive.ts`) overrides the off-screen canvas pause so the section visuals stay rendered as they fly past — then normal pausing resumes.
 
 ### 3D visualization — React Three Fiber + Three.js
 All three canvases share a **morph-target** technique: positions are precomputed for each target shape, and a single point buffer is interpolated between them every frame in `useFrame`. A shared, canvas-generated **radial-gradient sprite** (`src/three/particleTexture.ts`) turns hard GL points into soft glowing orbs, and a **selective bloom** pass (`@react-three/postprocessing`) provides the luminous, cinematic quality. Depth fog fades distant particles for volume, and the Hero assembly uses a gentle `easeOutBack` overshoot so nucleotides *settle* into the lattice.

@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { subscribeIntroActive, getIntroActive, getIntroActiveServer } from './introActive';
 
 /**
  * Tracks whether an element is within (or near) the viewport. Used to pause
@@ -31,5 +32,9 @@ export function useInView<T extends HTMLElement>(rootMargin = '250px') {
     return () => io.disconnect();
   }, [rootMargin]);
 
-  return { ref, inView } as const;
+  // While the cinematic intro runs, force every canvas to keep rendering so the
+  // auto-scroll journey never reveals a paused/blank canvas.
+  const introActive = useSyncExternalStore(subscribeIntroActive, getIntroActive, getIntroActiveServer);
+
+  return { ref, inView: introActive || inView } as const;
 }
